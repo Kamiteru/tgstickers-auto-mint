@@ -1,4 +1,4 @@
-# Sticker Hunter Bot
+# Sticker Auto Mint Bot
 
 Автоматизированная система покупки стикеров на платформе Stickerdom с поддержкой TON и Telegram Stars.
 
