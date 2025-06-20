@@ -131,6 +131,7 @@ Thumbs.db
 
 # Rate limiter database
 data/rate_limiter.db*
+rate_limiter.db*
 test_*.db
 
 # Cache and temporary files

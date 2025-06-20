@@ -343,7 +343,7 @@ class PurchaseOrchestrator:
                     wallet_info = await self.cache.get_cached_balance()
                 else:
                     wallet_info = await self.wallet.get_wallet_info()
-                required = character_price_ton * count + settings.gas_amount
+                required = character_price_ton + settings.gas_amount  # Price is already per pack, not per sticker
 
                 if not wallet_info.has_sufficient_balance(required):
                     raise InsufficientBalanceError(
@@ -359,7 +359,7 @@ class PurchaseOrchestrator:
                     collection_id=collection_id,
                     character_id=character_id,
                     count=count,
-                    price_per_item=character_price_ton,
+                    price_per_item=character_price_ton / count,  # Convert pack price to per-sticker price
                     total_amount=Decimal(purchase_data['total_amount']),
                     order_id=purchase_data['order_id'],
                     destination_wallet=purchase_data['wallet'],
