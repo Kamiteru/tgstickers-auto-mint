@@ -17,7 +17,9 @@ class CharacterInfo:
     id: int
     name: str
     left: int
-    price: float
+    price: float = 0.0  # Default value for backward compatibility
+    total: int = 1  # Total supply
+    rarity: str = "common"  # Character rarity
     
     @property
     def is_available(self) -> bool:
@@ -29,9 +31,10 @@ class CollectionInfo:
     id: int
     name: str
     status: str
-    total_count: int
-    sold_count: int
     characters: List[CharacterInfo]
+    total_characters: int = 0  # Total number of character types
+    total_count: int = 0  # Backward compatibility
+    sold_count: int = 0  # Backward compatibility
     
 
     @property

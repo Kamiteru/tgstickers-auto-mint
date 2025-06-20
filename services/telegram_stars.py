@@ -17,7 +17,10 @@ class TelegramStarsPayment:
         self.api_id = settings.telegram_api_id
         self.api_hash = settings.telegram_api_hash
         self.phone = settings.telegram_phone
-        self.session_name = settings.telegram_session_name or 'stars_payment_session'
+        base_session_name = settings.telegram_session_name or 'stars_payment_session'
+        # Store sessions in data directory
+        os.makedirs('data', exist_ok=True)
+        self.session_name = f'data/{base_session_name}'
         self._client = None  # Store reference to client for session management
         logger.info("Telegram Stars payment service initialized")
     
@@ -133,32 +136,19 @@ class TelegramStarsPayment:
         except Exception as e:
             logger.error(f"Error removing session files: {e}")
 
-    def check_bot_connection(self) -> bool:
+    async def check_bot_connection(self) -> bool:
         """Test Telegram client connection"""
         try:
-            # Create a temporary client to test connection
-            async def test_connection():
-                async with TelegramClient(
-                    f"test_{self.session_name}", 
-                    self.api_id, 
+            async with TelegramClient(
+                    self.session_name,
+                    self.api_id,
                     self.api_hash
-                ) as client:
-                    await client.start(phone=self.phone)
-                    me = await client.get_me()
-                    logger.info(f"Connected to Telegram as: {me.username or me.first_name}")
-                    return True
-            
-            # Run the test in event loop
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                # If loop is already running, we can't test synchronously
-                logger.info("Event loop already running, assuming connection is OK")
+            ) as client:
+                await client.start(phone=self.phone)
+                me = await client.get_me()
+                logger.info(f"Connected to Telegram as: {me.username or me.first_name}")
                 return True
-            else:
-                return loop.run_until_complete(test_connection())
-                
-        except Exception as e:
-            logger.error(f"Telegram client connection test failed: {e}")
+        except Exception:
             return False
 
     async def get_session_info(self):

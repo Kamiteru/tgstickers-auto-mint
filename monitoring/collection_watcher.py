@@ -48,9 +48,12 @@ class CollectionWatcher:
         last_stock = 0
         collection_found = False
         
+        # Import RequestPriority for background monitoring
+        from services.rate_limiter import RequestPriority
+        
         while collection_id in self._watched_collections:
             try:
-                collection = await self.api.get_collection(collection_id)
+                collection = await self.api.get_collection(collection_id, priority=RequestPriority.LOW)
                 
                 if collection is None:
                     self._collection_not_found_count[collection_id] += 1

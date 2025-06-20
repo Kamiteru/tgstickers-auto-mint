@@ -7,57 +7,73 @@ from exceptions import ConfigError
 load_dotenv()
 
 
-@dataclass
-class Config:
+class Settings:
+    """Application configuration settings"""
     
-    # Security: load from environment variables
-    jwt_token: str = os.getenv('STICKERDOM_JWT_TOKEN', '')
-    ton_seed_phrase: str = os.getenv('TON_SEED_PHRASE', '')
-    
-    # Payment methods selection (can be multiple, comma-separated)
-    payment_methods: list = field(default_factory=lambda: [method.strip().upper() for method in os.getenv('PAYMENT_METHODS', 'STARS').split(',')])
-    
-    # Telegram bot settings for Stars payments (legacy)
-    telegram_bot_token_payment: str = os.getenv('TELEGRAM_BOT_TOKEN_PAYMENT', '')
-    telegram_chat_id_payment: str = os.getenv('TELEGRAM_CHAT_ID_PAYMENT', '')
-    
-    # Telethon settings for Stars payments (new method)
-    telegram_api_id: int = int(os.getenv('TELEGRAM_API_ID', '0'))
-    telegram_api_hash: str = os.getenv('TELEGRAM_API_HASH', '')
-    telegram_phone: str = os.getenv('TELEGRAM_PHONE', '')
-    telegram_session_name: str = os.getenv('TELEGRAM_SESSION_NAME', 'stars_payment_session')
-    
-    # Trading settings
-    stickers_per_purchase: int = int(os.getenv('STICKERS_PER_PURCHASE', '5'))
-    gas_amount: float = float(os.getenv('GAS_AMOUNT', '0.1'))
-    purchase_delay: int = int(os.getenv('PURCHASE_DELAY', '1'))
-    
-    # Monitoring settings
-    collection_check_interval: int = int(os.getenv('COLLECTION_CHECK_INTERVAL', '1'))
-    collection_not_found_retry: int = int(os.getenv('COLLECTION_NOT_FOUND_RETRY', '3'))
-    max_retries_per_request: int = int(os.getenv('MAX_RETRIES_PER_REQUEST', '5'))
-    request_timeout: int = int(os.getenv('REQUEST_TIMEOUT', '10'))
-    
-    # Performance cache settings
-    cache_balance_interval: float = float(os.getenv('CACHE_BALANCE_INTERVAL', '2.0'))  # Balance refresh interval in seconds
-    cache_price_interval: float = float(os.getenv('CACHE_PRICE_INTERVAL', '10.0'))    # Price refresh interval in seconds
-    
-    # Captcha settings
-    captcha_enabled: bool = os.getenv('CAPTCHA_ENABLED', 'true').lower() == 'true'
-    anticaptcha_api_key: str = os.getenv('ANTICAPTCHA_API_KEY', '')
-    captcha_timeout: int = int(os.getenv('CAPTCHA_TIMEOUT', '300'))  # 5 minutes timeout
-    
-    # Constants
-    api_base_url: str = "https://api.stickerdom.store"
-    ton_endpoint: str = os.getenv('TON_ENDPOINT', 'mainnet')  # mainnet or testnet
-    
-    # Notification settings
-    telegram_bot_token: str = os.getenv('TELEGRAM_BOT_TOKEN', '')
-    telegram_chat_id: str = os.getenv('TELEGRAM_CHAT_ID', '')
-    
+    def __init__(self):
+        load_dotenv()
+        
+        # Apply rate limiter profile before loading config
+        self._apply_rate_limiter_profile()
+        
+        # Core API Configuration
+        self.stickerdom_jwt_token = os.getenv('STICKERDOM_JWT_TOKEN')
+        self.api_base_url = os.getenv('API_BASE_URL', 'https://api.stickerdom.store')
+        self.jwt_token = self.stickerdom_jwt_token  # Legacy compatibility
+        self.payment_methods = [method.strip() for method in os.getenv('PAYMENT_METHODS', 'TON,STARS').split(',')]
+        
+        # TON Blockchain Configuration
+        self.ton_seed_phrase = os.getenv('TON_SEED_PHRASE')
+        self.ton_endpoint = os.getenv('TON_ENDPOINT', 'mainnet')
+        
+        # Telegram Stars Payment Configuration
+        self.telegram_api_id = int(os.getenv('TELEGRAM_API_ID', 0))
+        self.telegram_api_hash = os.getenv('TELEGRAM_API_HASH', '')
+        self.telegram_phone = os.getenv('TELEGRAM_PHONE', '')
+        self.telegram_session_name = os.getenv('TELEGRAM_SESSION_NAME', 'stars_payment_session')
+        
+        # CAPTCHA Configuration
+        self.captcha_enabled = os.getenv('CAPTCHA_ENABLED', 'true').lower() == 'true'
+        self.anticaptcha_api_key = os.getenv('ANTICAPTCHA_API_KEY')
+        self.captcha_timeout = int(os.getenv('CAPTCHA_TIMEOUT', 300))
+        
+        # Rate Limiter Configuration
+        self.rate_limiter_enabled = os.getenv('RATE_LIMITER_ENABLED', 'true').lower() == 'true'
+        self.rate_limiter_db_path = os.getenv('RATE_LIMITER_DB_PATH', 'data/rate_limiter.db')
+        self.rate_limiter_max_delay = int(os.getenv('RATE_LIMITER_MAX_DELAY', 300))
+        self.rate_limiter_circuit_breaker_threshold = int(os.getenv('RATE_LIMITER_CIRCUIT_BREAKER_THRESHOLD', 3))
+        self.rate_limiter_circuit_breaker_timeout = int(os.getenv('RATE_LIMITER_CIRCUIT_BREAKER_TIMEOUT', 300))
+        self.rate_limiter_preemptive_delay = int(os.getenv('RATE_LIMITER_PREEMPTIVE_DELAY', 60))
+        self.rate_limiter_aggressive_backoff_multiplier = float(os.getenv('RATE_LIMITER_AGGRESSIVE_BACKOFF_MULTIPLIER', 2.0))
+        
+        # Notification System Configuration
+        self.telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+        self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
+        
+        # API Client Configuration
+        self.request_timeout = int(os.getenv('REQUEST_TIMEOUT', 30))
+        self.max_retries_per_request = int(os.getenv('MAX_RETRIES_PER_REQUEST', 5))
+        self.price_cache_ttl = int(os.getenv('PRICE_CACHE_TTL', 30))
+        self.collection_check_interval = int(os.getenv('COLLECTION_CHECK_INTERVAL', 5))
+        self.collection_not_found_retry = int(os.getenv('COLLECTION_NOT_FOUND_RETRY', 30))
+        
+        # Logging Configuration
+        self.log_level = os.getenv('LOG_LEVEL', 'INFO')
+        self.log_to_file = os.getenv('LOG_TO_FILE', 'true').lower() == 'true'
+        self.log_file_path = os.getenv('LOG_FILE_PATH', 'logs/sticker_bot.log')
+        
+        # Advanced Settings
+        self.dry_run_mode = os.getenv('DRY_RUN_MODE', 'false').lower() == 'true'
+        self.test_mode = os.getenv('TEST_MODE', 'false').lower() == 'true'
+        self.monitoring_interval = int(os.getenv('MONITORING_INTERVAL', 1))
+        
+        # Legacy compatibility
+        self.stickers_per_purchase = 5  # Fixed value for current implementation
+        self.gas_amount = 0.1  # Standard TON gas amount
+
     def validate(self):
         """Validate required configuration"""
-        if not self.jwt_token:
+        if not self.stickerdom_jwt_token:
             raise ConfigError("STICKERDOM_JWT_TOKEN environment variable is required")
         
         # Validate payment methods
@@ -87,10 +103,29 @@ class Config:
         if self.gas_amount <= 0:
             raise ConfigError("GAS_AMOUNT must be positive")
     
+    def _apply_rate_limiter_profile(self):
+        """Apply rate limiter profile settings if available"""
+        try:
+            from services.rate_limiter_profiles import profile_manager
+            # Profile manager will be applied after config loading
+            self._profile_manager = profile_manager
+        except ImportError:
+            # Profiles not available, use defaults
+            self._profile_manager = None
+    
+    def apply_profile_overrides(self):
+        """Apply profile overrides after config is loaded"""
+        if hasattr(self, '_profile_manager') and self._profile_manager:
+            self._profile_manager.apply_to_settings(self)
+
     @property
     def payment_method(self) -> str:
         """Backward compatibility property - returns first payment method"""
         return self.payment_methods[0] if self.payment_methods else 'STARS'
 
 
-settings = Config()
+# Create settings instance
+settings = Settings()
+
+# Apply profile overrides after settings are created
+settings.apply_profile_overrides()

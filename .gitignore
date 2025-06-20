@@ -1,10 +1,21 @@
-# Byte-compiled / optimized / DLL files
+# Environment and Config
+.env
+*.session
+data/*.session
+logs/
+data/rate_limiter.db*
+
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # Distribution / packaging
 .Python
@@ -19,19 +30,34 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation backups
+*_backup.md
+docs/archive/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Unit test / coverage reports
 htmlcov/
@@ -91,7 +117,6 @@ poetry.lock
 .pyre/
 
 # dotenv
-.env
 .env.*
 
 # VS Code
@@ -102,4 +127,13 @@ poetry.lock
 Thumbs.db
 
 # Project specific
-images/ 
+# (moved to docs/images/)
+
+# Rate limiter database
+data/rate_limiter.db*
+test_*.db
+
+# Cache and temporary files
+*.flag
+*.cache
+*.tmp 

@@ -56,7 +56,7 @@ class StickerHunterBot:
         
         if 'STARS' in settings.payment_methods:
             logger.info("Initializing Telegram Stars payment...")
-            if not self.stars_payment.check_bot_connection():
+            if not await self.stars_payment.check_bot_connection():
                 raise RuntimeError("Failed to connect to Telegram for Stars payments")
             logger.info("Telegram Stars connection verified")
         
@@ -255,6 +255,16 @@ class StickerHunterBot:
         """Test mode: verify configuration and connections without purchases"""
         logger.info("🧪 Running in TEST MODE - no purchases will be made")
         
+        # Show current rate limiter profile
+        try:
+            from services.rate_limiter_profiles import profile_manager
+            profile = profile_manager.get_profile()
+            logger.info(f"🎛️ Active Profile: {profile.name}")
+            logger.info(f"   📝 {profile.description}")
+            logger.info(f"   🕒 Max delay: {profile.max_delay}s, Check interval: {profile.collection_check_interval}s")
+        except ImportError:
+            pass
+        
         try:
             # Test configuration
             logger.info("1️⃣ Testing configuration...")
@@ -279,7 +289,7 @@ class StickerHunterBot:
             
             if 'STARS' in settings.payment_methods:
                 logger.info("3️⃣ Testing Telegram Stars client...")
-                if self.stars_payment.check_bot_connection():
+                if await self.stars_payment.check_bot_connection():
                     logger.info("✅ Telegram client connected for Stars payments")
                 else:
                     logger.error("❌ Failed to connect to Telegram client")
@@ -697,7 +707,51 @@ Examples:
         help="Clear local session files without logout"
     )
     
+    # Rate limiter profile options
+    parser.add_argument(
+        "--profile",
+        type=str,
+        choices=['safe', 'balanced', 'fast', 'aggressive', 'extreme'],
+        help="Rate limiter profile (safe/balanced/fast/aggressive/extreme)"
+    )
+    parser.add_argument(
+        "--safe",
+        action="store_true",
+        help="Use safe rate limiter profile (max protection)"
+    )
+    parser.add_argument(
+        "--balanced",
+        action="store_true", 
+        help="Use balanced rate limiter profile (default)"
+    )
+    parser.add_argument(
+        "--fast",
+        action="store_true",
+        help="Use fast rate limiter profile (quick soldouts)"
+    )
+    parser.add_argument(
+        "--aggressive",
+        action="store_true",
+        help="Use aggressive rate limiter profile (high speed)"
+    )
+    parser.add_argument(
+        "--extreme",
+        action="store_true",
+        help="Use extreme rate limiter profile (maximum speed)"
+    )
+    parser.add_argument(
+        "--list-profiles",
+        action="store_true",
+        help="List all available rate limiter profiles and exit"
+    )
+    
     args = parser.parse_args()
+    
+    # Handle profile listing
+    if args.list_profiles:
+        from services.rate_limiter_profiles import print_available_profiles
+        print_available_profiles()
+        return
     
     # Validate arguments
     exclusive_args = [args.once, args.continuous, args.test, args.dry_run, args.test_notifications, 

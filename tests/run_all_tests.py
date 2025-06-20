@@ -86,25 +86,29 @@ async def run_all_tests():
     logger.info("=" * 60)
     
     tests_passed = 0
-    total_test_suites = 5
+    total_test_suites = 6
     
-    # 1. Captcha Tests
+    # 1. Rate Limiter Tests
+    if run_subprocess_test("tests/test_rate_limiter.py", "Rate Limiter System Tests"):
+        tests_passed += 1
+    
+    # 2. Captcha Tests
     if run_subprocess_test("tests/test_captcha.py", "Captcha System Tests"):
         tests_passed += 1
     
-    # 2. API Tests
+    # 3. API Tests
     if run_subprocess_test("tests/test_api.py", "API Connection Tests"):
         tests_passed += 1
     
-    # 3. Wallet Tests
+    # 4. Wallet Tests
     if run_subprocess_test("tests/test_wallet.py", "TON Wallet Tests"):
         tests_passed += 1
     
-    # 4. Main.py Tests
+    # 5. Main.py Tests
     if await run_main_py_tests():
         tests_passed += 1
     
-    # 5. Basic Import Tests
+    # 6. Basic Import Tests
     logger.info("🧪 Running Import Tests...")
     logger.info("=" * 50)
     try:
@@ -113,6 +117,7 @@ async def run_all_tests():
         from services.api_client import StickerdomAPI
         from services.ton_wallet import TONWalletManager
         from services.captcha_solver import CaptchaManager
+        from services.rate_limiter import RateLimiterService, RequestPriority
         from utils.notifications import TelegramNotifier
         
         logger.info("✅ All critical imports successful")

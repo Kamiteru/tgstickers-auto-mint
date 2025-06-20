@@ -133,8 +133,11 @@ class PurchaseOrchestrator:
             active_method = settings.payment_methods[0]
 
         try:
+            # Import RequestPriority for purchase operations
+            from .rate_limiter import RequestPriority
+            
             # Validate collection availability
-            collection = await self.api.get_collection(collection_id)
+            collection = await self.api.get_collection(collection_id, priority=RequestPriority.HIGH)
             if not collection or not collection.is_active:
                 raise CollectionNotAvailableError(f"Collection {collection_id} not available")
 
@@ -165,7 +168,7 @@ class PurchaseOrchestrator:
                 if self.cache:
                     character_price_ton = await self.cache.get_cached_price(collection_id, character_id)
                 else:
-                    character_price_ton = await self.api.get_character_price(collection_id, character_id, "TON")
+                    character_price_ton = await self.api.get_character_price(collection_id, character_id, "TON", priority=RequestPriority.CRITICAL)
                     if not character_price_ton:
                         raise CollectionNotAvailableError(f"Could not get TON price for character {character_id}")
 
@@ -281,7 +284,7 @@ class PurchaseOrchestrator:
 
         try:
             # Re-validate collection state (it might have changed)
-            collection = await self.api.get_collection(collection_id)
+            collection = await self.api.get_collection(collection_id, priority=RequestPriority.CRITICAL)
             if not collection or not collection.is_active:
                 raise CollectionNotAvailableError(f"Collection {collection_id} not available")
 
