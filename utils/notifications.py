@@ -101,10 +101,10 @@ class TelegramNotifier:
     ):
         """Notify when collection becomes available"""
         # Show price in stars if available, otherwise TON
-        if price_stars:
-            price_text = f"💵 Price: <b>{price_stars} Stars per sticker</b>"
-        elif price_ton:
-            price_text = f"💵 Price: <b>{price_ton} TON per sticker</b>"
+        if price_stars and price_stars > 0:
+            price_text = f"💵 Price: <b>{price_stars} Stars per pack</b>"
+        elif price_ton and price_ton > 0:
+            price_text = f"💵 Price: <b>{price_ton} TON per pack</b>"
         else:
             price_text = "💵 Price: <b>Unknown</b>"
             

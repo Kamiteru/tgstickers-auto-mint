@@ -343,8 +343,8 @@ class StickerHunterBot:
                     logger.info(f"✅ Character found: {character.name}")
                     logger.info(f"📦 Stock: {character.left}")
                     
-                    # character.price is already in stars (Telegram's internal currency)
-                    logger.info(f"💵 Price: {int(character.price)} stars per sticker")
+                    # character.price is already per pack (not per sticker)
+                    logger.info(f"💵 Price: {int(character.price)} stars per pack")
                 else:
                     logger.warning(f"⚠️ Character {character_id} not found in collection")
             else:
@@ -384,8 +384,8 @@ class StickerHunterBot:
             
             logger.info(f"🎯 Found available character: {character.name}")
             logger.info(f"📦 Stock: {character.left}")
-            # Display price in stars (character.price is already in Telegram's internal currency)
-            logger.info(f"💵 Price: {int(character.price)} stars per sticker")
+            # Display price in stars (character.price is already per pack)
+            logger.info(f"💵 Price: {int(character.price)} stars per pack")
             
             max_purchases_ton = 0
             max_purchases_stars = 0
@@ -396,7 +396,7 @@ class StickerHunterBot:
                 character_price_ton = await self.api.get_character_price(collection_id, character_id, "TON")
                 
                 if character_price_ton:
-                    logger.info(f"💰 Current TON price: {character_price_ton} TON per sticker")
+                    logger.info(f"💰 Current TON price: {character_price_ton} TON per pack")
                 
                 # Simulate purchase calculation
                 wallet_info = await self.wallet.get_wallet_info()
@@ -442,7 +442,7 @@ class StickerHunterBot:
             else:
                 if 'TON' in settings.payment_methods and self.wallet:
                     character_price_ton = await self.api.get_character_price(collection_id, character_id, "TON")
-                    required = (character_price_ton or character.price) * settings.stickers_per_purchase + settings.gas_amount
+                    required = (character_price_ton or character.price) + settings.gas_amount  # Price is already per pack
                     wallet_info = await self.wallet.get_wallet_info()
                     logger.info(f"❌ SIMULATION: Insufficient TON balance")
                     logger.info(f"💸 Would need: {required:.2f} TON, have: {wallet_info.balance_ton:.2f} TON")

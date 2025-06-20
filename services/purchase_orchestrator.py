@@ -28,11 +28,11 @@ class PurchaseOrchestrator:
     def calculate_max_purchases(
         self,
         available_balance: float,
-        price_per_sticker: float,
+        price_per_pack: float,
         stickers_per_purchase: int = 5
     ) -> Tuple[int, float]:
         """Calculate maximum number of purchases possible with available balance"""
-        cost_per_purchase = price_per_sticker * stickers_per_purchase
+        cost_per_purchase = price_per_pack  # Price is already per pack, not per sticker
         cost_with_gas = cost_per_purchase + settings.gas_amount
         
         if cost_with_gas > available_balance:
@@ -157,7 +157,7 @@ class PurchaseOrchestrator:
                 raise CollectionNotAvailableError("No stock available")
 
             logger.info(
-                f"Character: {character.name} (stock: {character.left}, price: {int(character.price)} stars per sticker)")
+                f"Character: {character.name} (stock: {character.left}, price: {int(character.price)} stars per pack)")
 
             # Calculate max purchases based on payment method
             if active_method == 'STARS':
@@ -184,7 +184,7 @@ class PurchaseOrchestrator:
                 )
                 
                 if max_purchases == 0:
-                    min_required = character_price_ton * settings.stickers_per_purchase + settings.gas_amount
+                    min_required = character_price_ton + settings.gas_amount  # Price is already per pack
                     raise InsufficientBalanceError(
                         f"Insufficient balance. Need at least {min_required:.2f} TON, "
                         f"have {wallet_info.balance_ton:.2f} TON"

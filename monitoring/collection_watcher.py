@@ -93,7 +93,7 @@ class CollectionWatcher:
                                 # character.price is already in stars (Telegram's internal currency)
                                 logger.info(
                                     f"Character {character.name} is available! "
-                                    f"Stock: {character.left}, Price: {int(character.price)} stars per sticker"
+                                    f"Stock: {character.left}, Price: {int(character.price)} stars per pack"
                                 )
                                 await callback(collection, character_id)
                             last_stock = character.left
