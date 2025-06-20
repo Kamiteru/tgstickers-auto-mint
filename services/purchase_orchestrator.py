@@ -6,6 +6,8 @@ from typing import List, Tuple, Optional
 from services.api_client import StickerdomAPI
 from services.ton_wallet import TONWalletManager
 from services.telegram_stars import TelegramStarsPayment
+from services.cache_manager import StateCache
+from services.rate_limiter import RequestPriority
 from models import (
     PurchaseRequest, PurchaseResult, PurchaseStatus
 )
@@ -18,7 +20,7 @@ from utils.logger import logger
 
 class PurchaseOrchestrator:
     
-    def __init__(self, api_client: StickerdomAPI, wallet_manager: Optional[TONWalletManager] = None, cache_manager: Optional['StateCache'] = None, stars_payment: Optional[TelegramStarsPayment] = None):
+    def __init__(self, api_client: StickerdomAPI, wallet_manager: Optional[TONWalletManager] = None, cache_manager: Optional[StateCache] = None, stars_payment: Optional[TelegramStarsPayment] = None):
         self.api = api_client
         self.wallet = wallet_manager
         self.cache = cache_manager  # Optional cache for performance optimization
@@ -133,9 +135,6 @@ class PurchaseOrchestrator:
             active_method = settings.payment_methods[0]
 
         try:
-            # Import RequestPriority for purchase operations
-            from .rate_limiter import RequestPriority
-            
             # Validate collection availability
             collection = await self.api.get_collection(collection_id, priority=RequestPriority.HIGH)
             if not collection or not collection.is_active:
@@ -283,8 +282,8 @@ class PurchaseOrchestrator:
         purchase_request = None
 
         try:
-            # Re-validate collection state (it might have changed)
-            collection = await self.api.get_collection(collection_id, priority=RequestPriority.CRITICAL)
+            # Validate collection availability
+            collection = await self.api.get_collection(collection_id, priority=RequestPriority.HIGH)
             if not collection or not collection.is_active:
                 raise CollectionNotAvailableError(f"Collection {collection_id} not available")
 
