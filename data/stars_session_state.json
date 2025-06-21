@@ -1,0 +1,60 @@
+{
+  "stats": {
+    "total_purchases": 4,
+    "successful_purchases": 1,
+    "failed_purchases": 3,
+    "total_errors": 3,
+    "session_start_time": 1750488908.590751,
+    "last_purchase_time": 1750489019.9526358,
+    "last_error_time": 1750489019.9526358,
+    "consecutive_errors": 3,
+    "average_response_time": 3.413651136398316,
+    "error_types": {
+      "APIError": 3
+    }
+  },
+  "state": {
+    "is_active": false,
+    "purchases_this_session": 1,
+    "last_purchase_interval": 0.0,
+    "adaptive_interval": 5.6,
+    "cooldown_until": 0.0,
+    "circuit_breaker_active": true,
+    "circuit_breaker_until": 1750489079.9526358,
+    "session_quality_score": 0.4000000000000001
+  },
+  "purchase_history": [
+    {
+      "timestamp": 1750488908.592753,
+      "success": true,
+      "response_time": 1.5,
+      "error_type": null,
+      "session_purchases": 1,
+      "quality_score": 1.0
+    },
+    {
+      "timestamp": 1750488908.5957541,
+      "success": false,
+      "response_time": 2.0,
+      "error_type": "APIError",
+      "session_purchases": 1,
+      "quality_score": 0.8
+    },
+    {
+      "timestamp": 1750488980.2223008,
+      "success": false,
+      "response_time": 13.416024923324585,
+      "error_type": "APIError",
+      "session_purchases": 1,
+      "quality_score": 0.6000000000000001
+    },
+    {
+      "timestamp": 1750489019.9526358,
+      "success": false,
+      "response_time": 1.2154357433319092,
+      "error_type": "APIError",
+      "session_purchases": 1,
+      "quality_score": 0.4000000000000001
+    }
+  ]
+}

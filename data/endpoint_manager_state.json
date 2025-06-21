@@ -1,0 +1,174 @@
+{
+  "timestamp": "2025-06-21T00:51:25.676755",
+  "endpoints": {
+    "purchase_ton": [
+      {
+        "url": "/api/v1/shop/buy/crypto",
+        "method": "POST",
+        "operation_type": "purchase_ton",
+        "parameters": {
+          "collection": 0,
+          "character": 0,
+          "currency": "TON",
+          "count": 5
+        },
+        "status": "working",
+        "last_tested": "2025-06-21T00:51:25.279756",
+        "success_rate": 0.8500000000000001,
+        "avg_response_time": 0.20299911499023438,
+        "failure_count": 0,
+        "priority": 1
+      },
+      {
+        "url": "/api/v1/shop/purchase/crypto",
+        "method": "POST",
+        "operation_type": "purchase_ton",
+        "parameters": {
+          "collection": 0,
+          "character": 0,
+          "currency": "TON"
+        },
+        "status": "failed",
+        "last_tested": "2025-06-21T00:51:23.850195",
+        "success_rate": 0.8,
+        "avg_response_time": 0.0,
+        "failure_count": 1,
+        "priority": 2
+      },
+      {
+        "url": "/api/v1/crypto/buy",
+        "method": "POST",
+        "operation_type": "purchase_ton",
+        "parameters": {
+          "collection_id": 0,
+          "character_id": 0,
+          "token": "TON"
+        },
+        "status": "failed",
+        "last_tested": "2025-06-21T00:51:23.934195",
+        "success_rate": 0.8,
+        "avg_response_time": 0.0,
+        "failure_count": 1,
+        "priority": 3
+      }
+    ],
+    "purchase_stars": [
+      {
+        "url": "/api/v1/shop/buy",
+        "method": "POST",
+        "operation_type": "purchase_stars",
+        "parameters": {
+          "collection": 0,
+          "character": 0
+        },
+        "status": "working",
+        "last_tested": "2025-06-21T00:51:25.674757",
+        "success_rate": 0.8500000000000001,
+        "avg_response_time": 0.19900059700012207,
+        "failure_count": 0,
+        "priority": 1
+      },
+      {
+        "url": "/api/v1/shop/purchase",
+        "method": "POST",
+        "operation_type": "purchase_stars",
+        "parameters": {
+          "collection": 0,
+          "character": 0,
+          "payment_method": "STARS"
+        },
+        "status": "failed",
+        "last_tested": "2025-06-21T00:51:24.109199",
+        "success_rate": 0.8,
+        "avg_response_time": 0.0,
+        "failure_count": 1,
+        "priority": 2
+      },
+      {
+        "url": "/api/v1/stars/buy",
+        "method": "POST",
+        "operation_type": "purchase_stars",
+        "parameters": {
+          "collection_id": 0,
+          "character_id": 0
+        },
+        "status": "failed",
+        "last_tested": "2025-06-21T00:51:24.193195",
+        "success_rate": 0.8,
+        "avg_response_time": 0.0,
+        "failure_count": 1,
+        "priority": 3
+      }
+    ],
+    "collection": [
+      {
+        "url": "/api/v1/collection/{id}",
+        "method": "GET",
+        "operation_type": "collection",
+        "parameters": {},
+        "status": "working",
+        "last_tested": "2025-06-21T00:51:24.278205",
+        "success_rate": 1.0,
+        "avg_response_time": 0.0,
+        "failure_count": 0,
+        "priority": 1
+      },
+      {
+        "url": "/api/v1/collections/{id}",
+        "method": "GET",
+        "operation_type": "collection",
+        "parameters": {},
+        "status": "failed",
+        "last_tested": "2025-06-21T00:51:24.360209",
+        "success_rate": 0.8,
+        "avg_response_time": 0.0,
+        "failure_count": 1,
+        "priority": 2
+      },
+      {
+        "url": "/api/v1/shop/collection/{id}",
+        "method": "GET",
+        "operation_type": "collection",
+        "parameters": {},
+        "status": "failed",
+        "last_tested": "2025-06-21T00:51:24.446209",
+        "success_rate": 0.8,
+        "avg_response_time": 0.0,
+        "failure_count": 1,
+        "priority": 3
+      }
+    ],
+    "price": [
+      {
+        "url": "/api/v1/shop/price/crypto",
+        "method": "GET",
+        "operation_type": "price",
+        "parameters": {
+          "collection": 0,
+          "character": 0
+        },
+        "status": "working",
+        "last_tested": "2025-06-21T00:51:24.530207",
+        "success_rate": 1.0,
+        "avg_response_time": 0.0,
+        "failure_count": 0,
+        "priority": 1
+      },
+      {
+        "url": "/api/v1/price/crypto",
+        "method": "GET",
+        "operation_type": "price",
+        "parameters": {
+          "collection_id": 0,
+          "character_id": 0
+        },
+        "status": "failed",
+        "last_tested": "2025-06-21T00:51:24.615207",
+        "success_rate": 0.8,
+        "avg_response_time": 0.0,
+        "failure_count": 1,
+        "priority": 2
+      }
+    ]
+  }
+}

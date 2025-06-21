@@ -67,6 +67,25 @@ TELEGRAM_PHONE=+71234567890
 TELEGRAM_SESSION_NAME=stars_payment_session
 ```
 
+#### Расширенная конфигурация Stars:
+```env
+# Профиль производительности: conservative/balanced/aggressive/extreme
+STARS_PROFILE=balanced
+
+# Максимум покупок за сессию
+STARS_MAX_PURCHASES_PER_SESSION=3
+
+# Интервал между покупками (секунды)
+STARS_PURCHASE_INTERVAL=2.0
+
+# Таймауты для операций Stars (секунды)
+STARS_PAYMENT_TIMEOUT=120
+STARS_INVOICE_TIMEOUT=30
+
+# Адаптивная система (рекомендуется)
+STARS_ADAPTIVE_LIMITS=true
+```
+
 #### Первый запуск:
 При первом запуске потребуется пройти авторизацию в Telegram:
 
@@ -199,6 +218,30 @@ python main.py 2/19
 ```env
 RATE_LIMITER_PROFILE=fast
 ```
+
+## Stars Профили
+
+| Профиль | Команда | Покупки/сессия | Интервал |
+|---------|---------|----------------|----------|
+| Conservative | `--stars-conservative` | 2 | 5.0s |
+| Balanced | `--stars-balanced` | 3 | 2.0s |
+| Aggressive | `--stars-aggressive` | 5 | 1.0s |
+| Extreme | `--stars-extreme` | 8 | 0.5s |
+
+```bash
+# Использование
+python main.py 2/19 --stars-balanced --once
+python main.py 2/19 --session-info
+
+# Через переменные окружения
+STARS_PROFILE=aggressive python main.py 2/19
+```
+
+**Покупки за сессию** - количество успешно завершенных покупок (не инвойсов) до автоматической паузы на `STARS_SESSION_COOLDOWN` секунд.
+
+**Адаптивная система**: Автоматическая коррекция интервалов на основе качества сессии и Circuit Breaker защита при ошибках.
+
+**Документация**: [STARS_OPTIMIZATION.md](STARS_OPTIMIZATION.md)
 
 ## Тестирование конфигурации
 

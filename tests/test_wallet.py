@@ -6,6 +6,7 @@ TON Wallet Test
 import asyncio
 import sys
 import os
+import pytest
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -15,6 +16,7 @@ from config import settings
 from utils.logger import logger
 
 
+@pytest.mark.asyncio
 async def test_wallet_connection():
     """Test wallet connection and initialization"""
     logger.info("👛 Testing wallet connection...")
@@ -30,6 +32,7 @@ async def test_wallet_connection():
         return False
 
 
+@pytest.mark.asyncio
 async def test_wallet_balance():
     """Test wallet balance retrieval"""
     logger.info("💰 Testing wallet balance...")
@@ -52,6 +55,7 @@ async def test_wallet_balance():
         return False
 
 
+@pytest.mark.asyncio
 async def test_wallet_address():
     """Test wallet address format"""
     logger.info("🏠 Testing wallet address...")
@@ -75,6 +79,7 @@ async def test_wallet_address():
         return False
 
 
+@pytest.mark.asyncio
 async def test_wallet_dry_run():
     """Test wallet dry run functionality"""
     logger.info("🧪 Testing wallet dry run...")

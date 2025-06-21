@@ -47,6 +47,7 @@ PurchaseOrchestrator ──→ StickerdomAPI ──→ RateLimiterService
 - **Компонент**: `TelegramStarsPayment`
 - **Endpoint**: `/api/v1/shop/purchase/stars`
 - **Процесс**: получение invoice → SendStarsFormRequest → подтверждение
+- **Новые возможности**: Система профилей, адаптивное управление сессиями, circuit breaker
 
 ## API Endpoints
 
@@ -119,6 +120,35 @@ async def execute_parallel_purchases(self, character_id: int) -> List[PurchaseRe
 async def get_character_price(self, character_id: int) -> Optional[CharacterPrice]
 ```
 
+### StarsSessionManager
+
+#### Управление сессиями Stars
+```python
+def __init__(self, state_file: str = "data/stars_session_state.json")
+```
+
+#### Ключевые методы
+
+**record_purchase_attempt(success: bool, response_time: float, error_type: str = None)**
+- Запись статистики покупки для адаптивной системы
+
+**get_adaptive_interval() -> float**  
+- Вычисление адаптивного интервала на основе качества сессии
+
+**is_circuit_breaker_active() -> bool**
+- Проверка состояния circuit breaker защиты
+
+### StarsProfileManager
+
+#### Управление профилями производительности
+Предустановленные профили: `conservative`, `balanced`, `aggressive`, `extreme`
+
+**get_active_profile() -> Dict**
+- Получение настроек активного профиля
+
+**set_active_profile(profile_name: str)**
+- Активация профиля с применением настроек
+
 ### StickerdomAPI
 
 #### Назначение приоритетов запросов
@@ -142,6 +172,17 @@ async def get_character_price(self, character_id: int) -> Optional[CharacterPric
 | `RATE_LIMITER_MAX_DELAY` | `300` | Максимальное ожидание (сек) |
 | `RATE_LIMITER_CIRCUIT_BREAKER_THRESHOLD` | `3` | Порог активации circuit breaker |
 | `RATE_LIMITER_CIRCUIT_BREAKER_TIMEOUT` | `300` | Длительность circuit breaker |
+
+### Переменные окружения Stars
+
+| Параметр | Значение | Описание |
+|----------|----------|----------|
+| `STARS_PROFILE` | `balanced` | Профиль производительности |
+| `STARS_MAX_PURCHASES_PER_SESSION` | `3` | Максимум покупок за сессию |
+| `STARS_PURCHASE_INTERVAL` | `2.0` | Интервал между покупками (сек) |
+| `STARS_PAYMENT_TIMEOUT` | `120` | Таймаут оплаты Stars (сек) |
+| `STARS_ADAPTIVE_LIMITS` | `true` | Адаптивная коррекция интервалов |
+| `STARS_CONCURRENT_PURCHASES` | `false` | Параллельные покупки |
 
 ### Режимы работы
 

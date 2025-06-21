@@ -27,3 +27,23 @@ class ConfigError(StickerHunterError):
 class CaptchaError(StickerHunterError):
     """Error related to captcha solving operations"""
     pass
+
+
+class ValidationError(StickerHunterError):
+    """Error related to input validation"""
+    pass
+
+
+class PaymentStrategyError(StickerHunterError):
+    """Error related to payment strategy operations"""
+    pass
+
+
+class PurchaseTimeoutError(StickerHunterError):
+    """Error when purchase operations timeout"""
+    pass
+
+
+class SecurityError(StickerHunterError):
+    """Error related to security validation"""
+    pass

@@ -3,6 +3,7 @@ import signal
 import argparse
 
 from services import StickerdomAPI, TONWalletManager, PurchaseOrchestrator, StateCache, TelegramStarsPayment, CaptchaManager
+from services.rate_limiter import RequestPriority
 from monitoring import CollectionWatcher
 from models import CollectionInfo
 from utils.logger import logger
@@ -574,7 +575,7 @@ class StickerHunterBot:
             raise
 
     async def session_info_mode(self):
-        """Show Telegram session information"""
+        """Show Telegram session information and Stars statistics"""
         logger.info("📱 Getting Telegram session information...")
         
         if not self.stars_payment:
@@ -591,6 +592,46 @@ class StickerHunterBot:
                 logger.info(f"⭐ Premium: {'Yes' if session_info['is_premium'] else 'No'}")
                 logger.info(f"📁 Session file: {session_info['session_file']}")
                 logger.info(f"💾 Session exists: {'Yes' if session_info['session_exists'] else 'No'}")
+                
+                # Show Stars session statistics if available
+                try:
+                    from services.stars_session_manager import get_stars_session_manager
+                    session_manager = get_stars_session_manager()
+                    stars_info = session_manager.get_session_info()
+                    
+                    logger.info("\n💫 Stars Session Statistics:")
+                    logger.info(f"   Purchases this session: {stars_info['purchases_this_session']}/{stars_info['max_purchases_per_session']}")
+                    logger.info(f"   Total purchases: {stars_info['total_purchases']}")
+                    logger.info(f"   Success rate: {stars_info['success_rate']:.1%}")
+                    logger.info(f"   Session quality: {stars_info['quality_score']:.2f}")
+                    logger.info(f"   Adaptive interval: {stars_info['adaptive_interval']:.1f}s")
+                    logger.info(f"   Circuit breaker: {'Active' if stars_info['circuit_breaker_active'] else 'Inactive'}")
+                    logger.info(f"   Session duration: {stars_info['session_duration_minutes']:.1f} minutes")
+                    
+                    if stars_info['error_types']:
+                        logger.info("   Error types:")
+                        for error_type, count in stars_info['error_types'].items():
+                            logger.info(f"     {error_type}: {count}")
+                    
+                    # Show Stars profile info
+                    try:
+                        from services.stars_profiles import get_stars_profile_manager
+                        profile_manager = get_stars_profile_manager()
+                        profile_info = profile_manager.get_current_profile_info()
+                        
+                        if profile_info:
+                            logger.info("\n🌟 Stars Profile Settings:")
+                            logger.info(f"   Profile: {profile_info['name']}")
+                            logger.info(f"   Description: {profile_info['description']}")
+                            logger.info(f"   Max purchases: {profile_info['max_purchases_per_session']}")
+                            logger.info(f"   Base interval: {profile_info['purchase_interval']}s")
+                            logger.info(f"   Adaptive limits: {'Yes' if profile_info['adaptive_limits'] else 'No'}")
+                            logger.info(f"   Concurrent: {'Yes' if profile_info['concurrent_purchases'] else 'No'}")
+                    except ImportError:
+                        pass
+                        
+                except ImportError:
+                    logger.info("💫 Stars session manager not available")
             else:
                 logger.error("❌ Failed to get session information")
         except Exception as e:
@@ -660,6 +701,7 @@ Examples:
   python main.py 2/19 --session-info     # Show Telegram session information
   python main.py 2/19 --logout-session   # Logout from Telegram and clear session
   python main.py 2/19 --clear-session    # Clear local session files only
+
         """
     )
     parser.add_argument(
@@ -706,6 +748,7 @@ Examples:
         action="store_true",
         help="Clear local session files without logout"
     )
+
     
     # Rate limiter profile options
     parser.add_argument(

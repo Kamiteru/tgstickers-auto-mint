@@ -101,6 +101,17 @@ python main.py 2/19 --test
 python main.py 2/19 --list-profiles
 ```
 
+## Stars Профили
+
+| Профиль | Команда | Покупки/сессия | Интервал | Применение |
+|---------|---------|----------------|----------|------------|
+| Conservative | `--stars-conservative` | 2 | 5.0s | Тестирование |
+| Balanced | `--stars-balanced` | 3 | 2.0s | Стандартное использование |
+| Aggressive | `--stars-aggressive` | 5 | 1.0s | Быстрые дропы |
+| Extreme | `--stars-extreme` | 8 | 0.5s | Критические ситуации |
+
+Адаптивная система с Circuit Breaker защитой и автоматической коррекцией интервалов.
+
 **Формат команд**: `персонаж_id/коллекция_id` (как найти ID см. в `docs/SETUP.md`)
 
 ## Платёжные системы
@@ -119,6 +130,7 @@ python main.py 2/19 --list-profiles
 
 - [`docs/SETUP.md`](docs/SETUP.md) - пошаговое руководство по настройке
 - [`docs/API.md`](docs/API.md) - техническая документация API и компонентов
+- [`docs/STARS_OPTIMIZATION.md`](docs/STARS_OPTIMIZATION.md) - детальное описание Stars оптимизации
 - [`tests/TEST_README.md`](tests/TEST_README.md) - описание тестового покрытия
 
 ## Поддержка

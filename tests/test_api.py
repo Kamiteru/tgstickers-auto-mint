@@ -6,6 +6,7 @@ API Connection Test
 import asyncio
 import sys
 import os
+import pytest
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -15,6 +16,7 @@ from config import settings
 from utils.logger import logger
 
 
+@pytest.mark.asyncio
 async def test_api_connection():
     """Test API connection"""
     logger.info("🌐 Testing API connection...")
@@ -30,6 +32,7 @@ async def test_api_connection():
     return result
 
 
+@pytest.mark.asyncio
 async def test_api_collection(collection_id: int = 1):
     """Test collection retrieval"""
     logger.info(f"📦 Testing collection retrieval for ID {collection_id}...")
@@ -47,6 +50,7 @@ async def test_api_collection(collection_id: int = 1):
     return collection is not None
 
 
+@pytest.mark.asyncio
 async def test_api_price(collection_id: int = 1, character_id: int = 1):
     """Test price retrieval"""
     logger.info(f"💰 Testing price retrieval for {collection_id}/{character_id}...")

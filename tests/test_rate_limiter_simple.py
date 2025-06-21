@@ -10,6 +10,7 @@ import tempfile
 import os
 import sys
 import random
+import pytest
 from unittest.mock import patch, MagicMock
 
 # Add parent directory to path for imports
@@ -125,6 +126,7 @@ class MockResponse:
         return self._json_data
 
 
+@pytest.mark.asyncio
 async def test_basic_rate_limiting():
     """Test basic rate limiting functionality"""
     logger.info("🔧 Testing basic rate limiting...")
@@ -254,6 +256,7 @@ async def test_basic_rate_limiting():
                 settings.rate_limiter_max_delay = original_max_delay
 
 
+@pytest.mark.asyncio
 async def test_3600s_scenario():
     """Test specific 3600s rate limit scenario"""
     logger.info("⏰ Testing 3600s rate limit scenario...")

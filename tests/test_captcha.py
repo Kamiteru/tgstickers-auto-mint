@@ -6,6 +6,7 @@ Test Captcha System - тестирование системы решения к�
 import asyncio
 import sys
 import os
+import pytest
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -15,6 +16,7 @@ from utils.notifications import TelegramNotifier
 from utils.logger import logger
 
 
+@pytest.mark.asyncio
 async def test_captcha_detection():
     """Тест обнаружения капчи в ответах"""
     logger.info("🧪 Testing captcha detection...")
@@ -61,6 +63,7 @@ async def test_captcha_detection():
             logger.info("⚪ No captcha detected")
 
 
+@pytest.mark.asyncio
 async def test_manual_captcha():
     """Тест ручного решения капчи"""
     logger.info("\n🤖 Testing manual captcha solving...")
@@ -88,6 +91,7 @@ async def test_manual_captcha():
         logger.error(f"❌ Manual captcha test failed: {e}")
 
 
+@pytest.mark.asyncio
 async def test_service_integration():
     """Тест интеграции с сервисами решения капч"""
     logger.info("\n🌐 Testing captcha service integration...")

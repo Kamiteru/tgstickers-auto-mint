@@ -10,6 +10,7 @@ import tempfile
 import os
 import sys
 import random
+import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
 from typing import Dict, List, Any
 
@@ -158,6 +159,7 @@ class APISimulator:
         logger.info(f"🎭 API Simulator: Switching to scenario '{scenario}'")
 
 
+@pytest.mark.asyncio
 async def test_realistic_rate_limiting_scenarios():
     """Test rate limiter under various realistic scenarios"""
     logger.info("🏗️ Testing realistic rate limiting scenarios...")
@@ -310,6 +312,7 @@ async def test_realistic_rate_limiting_scenarios():
                     await api_client.cleanup()
 
 
+@pytest.mark.asyncio
 async def test_severe_3600s_simulation():
     """Simulate the exact 3600s rate limit scenario"""
     logger.info("⏰ Testing 3600s rate limit scenario...")
@@ -406,6 +409,7 @@ async def test_severe_3600s_simulation():
                     delattr(settings, 'test_mode')
 
 
+@pytest.mark.asyncio
 async def test_burst_and_throttling():
     """Test burst requests and throttling behavior"""
     logger.info("💥 Testing burst requests and adaptive throttling...")
