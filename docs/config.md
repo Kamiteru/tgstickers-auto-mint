@@ -1,106 +1,107 @@
 # Конфигурация
 
-## Обязательные параметры
+## Создание .env файла
 
-### 1. JWT токен Stickerdom
-
-```env
-STICKERDOM_JWT_TOKEN=your_jwt_token_here
+Скопируйте `env.example` в `.env` и заполните параметры:
+```bash
+cp env.example .env
 ```
 
-**Как получить JWT токен:**
+## JWT токен Stickerdom
 
-1. Откройте [stickerdom.store](https://stickerdom.store) в браузере
-2. Откройте DevTools (F12) → Network
-3. Авторизуйтесь на сайте
-4. Найдите любой запрос к API
-5. Скопируйте значение из заголовка `Authorization: Bearer xxx`
+**Токен действует только 60 минут**
 
-### 2. Методы оплаты
+1. **Залогиньтесь в Telegram в браузере** (в аккаунт на котором будут покупаться стикеры)
+   - Откройте DevTools (F12)
+   - Перейдите в личку с Sticker Pack: https://web.telegram.org/a/#7686366470
+   - Нажмите "Open"
+
+   ![Шаг 1](images/1.png)
+
+2. **В поиске DevTools** найдите запрос содержащий `auth`
+
+   ![Шаг 2](images/2.png)
+
+3. **Во вкладке Response** скопируйте JWT токен
+
+   ![Шаг 3](images/3.png)
 
 ```env
-PAYMENT_METHODS=TON,STARS
+STICKERDOM_JWT_TOKEN=ваш_jwt_токен
 ```
 
-Доступные методы: `TON`, `STARS`
-
-## Настройка TON платежей
+## Методы оплаты
 
 ```env
-TON_SEED_PHRASE=word1 word2 word3 ... word24
+PAYMENT_METHODS=TON,STARS  # Рекомендуются оба метода
+```
+
+## TON кошелек
+
+```env
+TON_SEED_PHRASE=ваша_seed_фраза
 TON_ENDPOINT=mainnet
 ```
 
-## Настройка Telegram Stars
+**Требования:** минимум 0.1 TON, тип кошелька WalletV5R1
+
+## Telegram Stars
+
+### API ключи:
+Получите на https://my.telegram.org/apps
 
 ```env
-# Получите на https://my.telegram.org
-TELEGRAM_API_ID=12345678
-TELEGRAM_API_HASH=your_api_hash
-TELEGRAM_PHONE=+1234567890
+TELEGRAM_API_ID=1234567
+TELEGRAM_API_HASH=ваш_api_hash
+TELEGRAM_PHONE=+71234567890
 TELEGRAM_SESSION_NAME=stars_session
 ```
 
-## Rate Limiter профили
-
+### Настройки производительности:
 ```env
-# Профили: safe, balanced, fast, aggressive, extreme
-RATE_LIMITER_PROFILE=balanced
-RATE_LIMITER_ENABLED=true
-```
-
-## Stars профили
-
-```env
-# Профили: conservative, balanced, aggressive, extreme
 STARS_PROFILE=balanced
 STARS_MAX_PURCHASES_PER_SESSION=3
 STARS_PURCHASE_INTERVAL=2.0
+STARS_ADAPTIVE_LIMITS=true
+```
+
+## CAPTCHA
+
+```env
+CAPTCHA_ENABLED=true
+ANTICAPTCHA_API_KEY=ваш_ключ_anticaptcha
+CAPTCHA_TIMEOUT=300
 ```
 
 ## Уведомления
 
 ```env
-TELEGRAM_BOT_TOKEN=your_bot_token
-TELEGRAM_CHAT_ID=your_chat_id
+TELEGRAM_BOT_TOKEN=токен_бота
+TELEGRAM_CHAT_ID=ваш_chat_id
 ```
 
-## CAPTCHA решение
+## Rate Limiter
 
 ```env
-CAPTCHA_ENABLED=true
-ANTICAPTCHA_API_KEY=your_anticaptcha_key
+RATE_LIMITER_ENABLED=true
+RATE_LIMITER_MAX_DELAY=300
+RATE_LIMITER_CIRCUIT_BREAKER_THRESHOLD=3
 ```
 
-## Дополнительные настройки
+## Адаптивные эндпоинты
 
 ```env
-# Прокси (опционально)
-PROXY_ENABLED=false
-PROXY_URL=http://user:pass@host:port
-
-# Логирование
-LOG_LEVEL=INFO
-LOG_TO_FILE=true
-
-# Тестовый режим
-DRY_RUN_MODE=false
-TEST_MODE=false
+ENDPOINT_VALIDATION_ENABLED=true
+ENDPOINT_VALIDATION_TIMEOUT=2.0
+SELENIUM_HEADLESS_DISABLED=false
 ```
 
 ## Проверка конфигурации
 
 ```bash
-# Тест всех настроек
-python main.py 2/19 --test
+# Тест подключения
+python main.py 1/1 --test
 
-# Тест уведомлений
-python main.py 2/19 --test-notifications
-
-# Информация о Stars сессии
-python main.py 2/19 --session-info
-```
-
-## Следующий шаг
-
-После настройки переходите к [запуску](run.md) системы. 
+# Проверка Stars авторизации
+python main.py 1/1 --session-info
+``` 

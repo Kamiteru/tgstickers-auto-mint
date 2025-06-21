@@ -2,81 +2,67 @@
 
 ## Системные требования
 
-- Python 3.8+
-- Git
-- 5 ГБ свободного места на диске
-- Стабильное интернет-соединение
+- **Python**: 3.8+
+- **Операционная система**: Windows, macOS, Linux
+- **Интернет**: Стабильное соединение
+- **Браузер**: Chrome (для адаптивных эндпоинтов)
+- **Аккаунт**: Активный аккаунт Stickerdom
 
-## Быстрая установка
-
-### 1. Клонирование репозитория
-
-```bash
-git clone https://github.com/Kamiteru/tgstickers-auto-mint.git
-cd tgstickers-auto-mint
-```
-
-### 2. Установка зависимостей
+## Установка зависимостей
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Создание конфигурации
+## Структура данных
 
+При первом запуске автоматически создается папка `data/` для хранения:
+- Базы данных SQLite
+- Файлов сессий Telegram
+- Состояния системы
+
+## Дополнительные зависимости
+
+### Anti-captcha сервис
+1. Регистрация на https://anti-captcha.com
+2. Пополнение баланса (минимум $5)
+3. Получение API ключа в Settings → API
+
+### Chrome браузер
+Необходим для адаптивной системы эндпоинтов:
 ```bash
-cp env.example .env
+# Windows - установить Chrome из официального сайта
+# Linux
+sudo apt install google-chrome-stable
+
+# macOS
+brew install --cask google-chrome
 ```
 
 ## Проверка установки
 
 ```bash
-# Проверка работоспособности
-python main.py 2/19 --test
+# Быстрая проверка
+python main.py 1/1 --test
 
-# Запуск тестов
+# Проверка всех компонентов
 python run_tests.py
 ```
 
-## Возможные проблемы
+## Устранение неполадок
 
-### Windows
-
+### Python версия
 ```bash
-# Если проблемы с curl_cffi
-pip install --upgrade curl-cffi
-
-# Если проблемы с Telethon
-pip install --upgrade telethon
+python --version  # Должно быть 3.8+
 ```
 
-### Linux/macOS
-
+### Зависимости
 ```bash
-# Установка системных зависимостей
-sudo apt-get install python3-dev libffi-dev libssl-dev
-
-# Или для macOS
-brew install openssl libffi
+pip list | grep -E "(requests|asyncio|telethon|ton)"
 ```
 
-## Структура проекта после установки
-
-```
-tgstickers-auto-mint/
-├── main.py                    # Основной исполняемый файл
-├── config.py                  # Конфигурация системы
-├── .env                       # Переменные окружения (создается вручную)
-├── data/                      # Создается автоматически
-│   ├── rate_limiter.db        # База данных rate limiter
-│   └── *.session              # Сессии Telegram
-├── docs/                      # Документация
-├── services/                  # Основные сервисы
-├── models/                    # Модели данных
-├── utils/                     # Утилиты
-└── tests/                     # Тесты
-```
-
-## Следующий шаг
-
-После установки переходите к [конфигурации](config.md) системы. 
+### Права доступа
+```bash
+# Linux/macOS
+chmod +x main.py
+``` 

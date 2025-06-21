@@ -1,0 +1,9 @@
+root: ./docs/
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+integrations:
+  github:
+    enabled: true 

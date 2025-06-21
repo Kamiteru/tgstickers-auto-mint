@@ -1,29 +1,22 @@
 {
-  "title": "Sticker Auto Mint Bot",
-  "description": "Документация для автоматизированной системы покупки стикеров на Stickerdom",
-  "author": "Kaiden",
+  "title": "TG Stickers Auto Mint",
+  "description": "Автоматическая покупка стикеров через Telegram Stars и TON",
+  "author": "TG Stickers Auto Mint Team",
   "language": "ru",
-  "gitbook": "3.2.3",
-  "styles": {
-    "website": "styles/website.css"
+  "gitbook": ">=3.0.0",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
   },
   "plugins": [
     "theme-default",
-    "anchors",
-    "highlight",
     "search",
-    "sharing",
-    "fontsettings",
-    "livereload"
+    "lunr",
+    "sharing"
   ],
   "pluginsConfig": {
     "theme-default": {
       "showLevel": true
-    },
-    "fontsettings": {
-      "theme": "night",
-      "family": "sans",
-      "size": 2
     },
     "sharing": {
       "facebook": false,
@@ -35,8 +28,9 @@
       "all": ["telegram"]
     }
   },
-  "variables": {
-    "version": "2.0.0",
-    "project_name": "tgstickers-auto-mint"
+  "links": {
+    "sidebar": {
+      "GitHub": "https://github.com/yourusername/tgstickers-auto-mint"
+    }
   }
 } 
