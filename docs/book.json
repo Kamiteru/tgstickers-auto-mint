@@ -1,0 +1,42 @@
+{
+  "title": "Sticker Auto Mint Bot",
+  "description": "Документация для автоматизированной системы покупки стикеров на Stickerdom",
+  "author": "Kaiden",
+  "language": "ru",
+  "gitbook": "3.2.3",
+  "styles": {
+    "website": "styles/website.css"
+  },
+  "plugins": [
+    "theme-default",
+    "anchors",
+    "highlight",
+    "search",
+    "sharing",
+    "fontsettings",
+    "livereload"
+  ],
+  "pluginsConfig": {
+    "theme-default": {
+      "showLevel": true
+    },
+    "fontsettings": {
+      "theme": "night",
+      "family": "sans",
+      "size": 2
+    },
+    "sharing": {
+      "facebook": false,
+      "twitter": false,
+      "google": false,
+      "weibo": false,
+      "instapaper": false,
+      "vk": false,
+      "all": ["telegram"]
+    }
+  },
+  "variables": {
+    "version": "2.0.0",
+    "project_name": "tgstickers-auto-mint"
+  }
+} 

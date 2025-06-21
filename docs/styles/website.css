@@ -1,0 +1,153 @@
+/* Dark theme for GitBook */
+body {
+    background-color: #1e1e1e !important;
+    color: #c0c0c0 !important;
+}
+
+.book-summary {
+    background-color: #252526 !important;
+    border-right: 1px solid #3e3e42 !important;
+}
+
+.book-summary ul.summary li a,
+.book-summary ul.summary li span {
+    color: #c0c0c0 !important;
+    border-top: 1px solid #3e3e42 !important;
+}
+
+.book-summary ul.summary li.active > a {
+    color: #569cd6 !important;
+    background-color: #2d2d30 !important;
+    border-left: 3px solid #569cd6 !important;
+}
+
+.book-body {
+    background-color: #1e1e1e !important;
+    color: #c0c0c0 !important;
+}
+
+.book-body .body-inner {
+    background-color: #1e1e1e !important;
+}
+
+.book-header {
+    background-color: #2d2d30 !important;
+    border-bottom: 1px solid #3e3e42 !important;
+}
+
+/* Links */
+a {
+    color: #569cd6 !important;
+}
+
+a:hover {
+    color: #9cdcfe !important;
+}
+
+/* Code blocks */
+pre {
+    background-color: #2d2d30 !important;
+    border: 1px solid #3e3e42 !important;
+    color: #c0c0c0 !important;
+}
+
+code {
+    background-color: #2d2d30 !important;
+    color: #c0c0c0 !important;
+    border: 1px solid #3e3e42 !important;
+}
+
+/* Tables */
+table {
+    background-color: #2d2d30 !important;
+    border: 1px solid #3e3e42 !important;
+}
+
+table th,
+table td {
+    border: 1px solid #3e3e42 !important;
+    color: #c0c0c0 !important;
+}
+
+table th {
+    background-color: #383838 !important;
+}
+
+/* Blockquotes */
+blockquote {
+    background-color: #2d2d30 !important;
+    border-left: 4px solid #569cd6 !important;
+    color: #c0c0c0 !important;
+}
+
+/* Search */
+.book-search input {
+    background-color: #2d2d30 !important;
+    border: 1px solid #3e3e42 !important;
+    color: #c0c0c0 !important;
+}
+
+/* Navigation */
+.navigation {
+    color: #c0c0c0 !important;
+}
+
+/* Page navigation */
+.page-wrapper .page-inner section.normal {
+    background-color: #1e1e1e !important;
+    color: #c0c0c0 !important;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+    color: #dcdcaa !important;
+}
+
+/* Inline code */
+.book-body .body-inner .page-wrapper .page-inner section.normal code {
+    background-color: #2d2d30 !important;
+    color: #ce9178 !important;
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+}
+
+/* Syntax highlighting adjustments */
+.hljs {
+    background-color: #2d2d30 !important;
+    color: #c0c0c0 !important;
+}
+
+.hljs-keyword {
+    color: #569cd6 !important;
+}
+
+.hljs-string {
+    color: #ce9178 !important;
+}
+
+.hljs-comment {
+    color: #6a9955 !important;
+}
+
+.hljs-number {
+    color: #b5cea8 !important;
+}
+
+/* Warning/Info boxes */
+.alert-info {
+    background-color: #1e3a5f !important;
+    border-color: #569cd6 !important;
+    color: #9cdcfe !important;
+}
+
+.alert-warning {
+    background-color: #4d3319 !important;
+    border-color: #d7ba7d !important;
+    color: #dcdcaa !important;
+}
+
+.alert-danger {
+    background-color: #5c1e1e !important;
+    border-color: #f14c4c !important;
+    color: #f48771 !important;
+} 
