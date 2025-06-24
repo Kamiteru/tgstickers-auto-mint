@@ -46,7 +46,7 @@ async def run_main_py_tests():
     logger.info("=" * 50)
     
     tests_passed = 0
-    total_tests = 2
+    total_tests = 1
     
     # Test configuration and connections
     try:
@@ -61,20 +61,6 @@ async def run_main_py_tests():
             logger.error("❌ Main.py test mode FAILED")
     except Exception as e:
         logger.error(f"❌ Main.py test mode FAILED: {e}")
-    
-    # Test notifications
-    try:
-        result = subprocess.run([sys.executable, "main.py", "1/1", "--test-notifications"], 
-                              capture_output=False, 
-                              text=True, 
-                              timeout=60)
-        if result.returncode == 0:
-            logger.info("✅ Main.py notifications test PASSED")
-            tests_passed += 1
-        else:
-            logger.error("❌ Main.py notifications test FAILED")
-    except Exception as e:
-        logger.error(f"❌ Main.py notifications test FAILED: {e}")
     
     logger.info(f"Main.py tests: {tests_passed}/{total_tests} passed")
     return tests_passed == total_tests

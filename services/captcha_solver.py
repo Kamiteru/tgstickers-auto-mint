@@ -140,8 +140,8 @@ class AntiCaptchaOfficialSolver(CaptchaSolver):
 class ManualCaptchaSolver(CaptchaSolver):
     """Manual captcha solving with user notification"""
     
-    def __init__(self, notification_manager=None):
-        self.notification_manager = notification_manager
+    def __init__(self):
+        pass
     
     def supports(self, captcha_type: str) -> bool:
         return True  # Supports any captcha type
@@ -152,23 +152,9 @@ class ManualCaptchaSolver(CaptchaSolver):
         
         logger.warning("🚨 CAPTCHA DETECTED - Manual intervention required!")
         
-        # Send notification to user
-        message = f"""
-🚨 CAPTCHA DETECTED!
-
-Type: {challenge.captcha_type}
-Site: {challenge.site_url or 'stickerdom.store'}
-
-Bot is paused. Required actions:
-1. Open stickerdom.store in browser
-2. Solve captcha manually
-3. Type "continue" in chat to resume
-
-⏰ Bot is waiting for your signal...
-        """
-        
-        if self.notification_manager:
-            await self.notification_manager.send_message(message)
+        logger.info(f"Type: {challenge.captcha_type}")
+        logger.info(f"Site: {challenge.site_url or 'stickerdom.store'}")
+        logger.info("Bot is paused. Solve captcha manually and create 'captcha_solved.flag' file")
         
         # Wait for user signal (can add webhook or file check here)
         logger.info("⏳ Waiting for manual captcha solution...")
@@ -198,24 +184,23 @@ Bot is paused. Required actions:
 
 
 class CaptchaManager:
-    """Manager for captcha solving process"""
+    """Main captcha management system"""
     
-    def __init__(self, notification_manager=None):
+    def __init__(self):
+        self.enabled = settings.captcha_enabled
         self.solvers = []
-        self.notification_manager = notification_manager
         self._setup_solvers()
     
     def _setup_solvers(self):
         """Setup available captcha solvers"""
-        
-        # Anti-captcha Official (primary solver)
-        if hasattr(settings, 'captcha_anticaptcha_key') and settings.captcha_anticaptcha_key:
-            self.solvers.append(AntiCaptchaOfficialSolver(settings.captcha_anticaptcha_key))
+        # Official anti-captcha.com solver is preferred
+        if self.enabled and hasattr(settings, 'anticaptcha_api_key') and settings.anticaptcha_api_key:
+            self.solvers.append(AntiCaptchaOfficialSolver(settings.anticaptcha_api_key))
             logger.info("✅ Anti-captcha official solver enabled")
         
-        # Manual solver (always available as fallback)
-        self.solvers.append(ManualCaptchaSolver(self.notification_manager))
-        logger.info("✅ Manual captcha solver enabled")
+        # Manual solver as fallback
+        self.solvers.append(ManualCaptchaSolver())
+        logger.info("✅ Manual captcha solver enabled as fallback")
     
     async def solve_captcha(self, challenge: CaptchaChallenge) -> CaptchaSolution:
         """Solve captcha using available methods"""
