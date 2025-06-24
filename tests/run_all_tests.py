@@ -113,9 +113,8 @@ async def run_all_tests():
         from services.api_client import StickerdomAPI
         from services.ton_wallet import TONWalletManager
         from services.captcha_solver import CaptchaManager
-        from utils.notifications import TelegramNotifier
         
-        logger.info("✅ All critical imports successful")
+        logger.info("✅ All critical imports (config, API, wallet, captcha) successful")
         tests_passed += 1
     except Exception as e:
         logger.error(f"❌ Import tests failed: {e}")

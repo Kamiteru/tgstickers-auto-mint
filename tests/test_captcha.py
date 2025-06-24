@@ -11,7 +11,6 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from services.captcha_solver import CaptchaManager, CaptchaChallenge
-from utils.notifications import TelegramNotifier
 from utils.logger import logger
 
 
@@ -19,8 +18,7 @@ async def test_captcha_detection():
     """Test captcha detection in responses"""
     logger.info("🧪 Testing captcha detection...")
     
-    notifier = TelegramNotifier()
-    captcha_manager = CaptchaManager(notifier)
+    captcha_manager = CaptchaManager()
     
     # Test data with different captcha types
     test_responses = [
@@ -65,8 +63,7 @@ async def test_manual_captcha():
     """Test manual captcha solving"""
     logger.info("\n🤖 Testing manual captcha solving...")
     
-    notifier = TelegramNotifier()
-    captcha_manager = CaptchaManager(notifier)
+    captcha_manager = CaptchaManager()
     
     # Create test captcha
     challenge = CaptchaChallenge(
